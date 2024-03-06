@@ -1,35 +1,42 @@
-const loadPhone = async (searchText) => {
+const loadPhone = async (searchText, isShowAll) => {
     const res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     const data = await res.json();
     const phones = data.data;
     // console.log(data);
     // console.log(data.data);
     // console.log(phones);
-    displayPhones(phones);
+    displayPhones(phones.isShowAll);
 }
 
 // step 1
-const displayPhones = phones => {
+const displayPhones = (phones, isShowAll) => {
     // console.log(phone)
     const phoneContainer = document.getElementById('phone-container');
 
     //clear phone container cards before adding new cards
-    phoneContainer.textContent = ''; 
+    phoneContainer.textContent = '';
 
     // console.log(phones.length);
 
     // display show all button if there are more than 12 button
     const showAllContainer = document.getElementById('show-all-container');
-    if (phones.length > 12) {
+    if (phones.length > 12 && !isShowAll) {
         showAllContainer.classList.remove('hidden')
     }
     else {
         showAllContainer.classList.add('hidden')
     }
 
+    console.log('is show all', isShowAll)
+    // display only frist 12 phones if not show all
+    if (!isShowAll) {
+        phones = phones.slice(0, 12);
+    }
+
+
 
     // display only first 12 phones
-    phones = phones.slice(0, 12);
+    // phones = phones.slice(0, 12);
 
     phones.forEach(phone => {
         // console.log(phone);
@@ -61,32 +68,38 @@ const displayPhones = phones => {
 
 
 // handle search button
-const handleSearch = () => {
+const handleSearch = (isShowAll) => {
     // console.log('search handle');
     toggleLoadingBars(true);
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
     console.log(searchText);
-    loadPhone(searchText);
+    loadPhone(searchText, isShowAll);
 }
 
 // handle search recap
-const handleSearch2 = () => {
-    toggleLoadingBars(true);
-    const searchField = document.getElementById('search-field2');
-    const searchText = searchField.value;
-    loadPhone(searchText);
-}
+// const handleSearch2 = () => {
+//     toggleLoadingBars(true);
+//     const searchField = document.getElementById('search-field2');
+//     const searchText = searchField.value;
+//     loadPhone(searchText);
+// }
 
 // loading bar 
 const toggleLoadingBars = (isLoading) => {
     const loadingBars = document.getElementById('loading-bars');
-    if(isLoading){
+    if (isLoading) {
         loadingBars.classList.remove('hidden')
     }
-    else{
+    else {
         loadingBars.classList.add('hidden');
     }
+}
+
+
+// handle show all
+const handleShowAll = () => {
+    handleSearch(true)
 }
 
 
