@@ -56,6 +56,7 @@ phoneContainer.appendChild(phoneCard);
 
 
 
+
 // handle search button
 const handleSearch = () => {
     // console.log('search handle');
